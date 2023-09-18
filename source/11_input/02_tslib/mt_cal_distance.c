@@ -1,3 +1,4 @@
+// 触摸屏有关数据的处理函数库文件
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>

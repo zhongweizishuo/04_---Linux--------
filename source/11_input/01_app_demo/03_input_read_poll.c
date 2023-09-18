@@ -1,4 +1,4 @@
-
+// // IO多路复用，poll ,使用poll函数来检测IO操作
 #include <linux/input.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -10,7 +10,7 @@
 #include <poll.h>
 
 
-/* ./01_get_input_info /dev/input/event0 */
+/*命令： ./01_get_input_info /dev/input/event0 */
 int main(int argc, char **argv)
 {
 	int fd;
@@ -58,13 +58,15 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	fd = open(argv[1], O_RDWR | O_NONBLOCK);
+	// 文件打开，注意权限
+	fd = open(argv[1], O_RDWR | O_NONBLOCK);	//非阻塞方式
 	if (fd < 0)
 	{
 		printf("open %s err\n", argv[1]);
 		return -1;
 	}
 
+	// get id 获取ID
 	err = ioctl(fd, EVIOCGID, &id);
 	if (err == 0)
 	{
@@ -74,6 +76,7 @@ int main(int argc, char **argv)
 		printf("version = 0x%x\n", id.version );
 	}
 
+	// get bit 位图信息
 	len = ioctl(fd, EVIOCGBIT(0, sizeof(evbit)), &evbit);
 	if (len > 0 && len <= sizeof(evbit))
 	{
@@ -91,12 +94,13 @@ int main(int argc, char **argv)
 		printf("\n");
 	}
 
+	// 循环读取数据
 	while (1)
 	{
 		fds[0].fd = fd;
 		fds[0].events  = POLLIN;
 		fds[0].revents = 0;
-		ret = poll(fds, nfds, 5000);
+		ret = poll(fds, nfds, 5000);	//timeout 超时时间是5秒钟
 		if (ret > 0)
 		{
 			if (fds[0].revents == POLLIN)

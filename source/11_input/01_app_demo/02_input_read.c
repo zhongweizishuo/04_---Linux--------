@@ -50,24 +50,27 @@ int main(int argc, char **argv)
 	
 	if (argc < 2)
 	{
+		// 提示用户正确的用法：<必须的参数> [可省略的参数]
 		printf("Usage: %s <dev> [noblock]\n", argv[0]);
 		return -1;
 	}
 
-	if (argc == 3 && !strcmp(argv[2], "noblock"))
+	if (argc == 3 && !strcmp(argv[2], "noblock")) //参数3为非阻塞方式，也就是查询方式来读写IO
 	{
 		fd = open(argv[1], O_RDWR | O_NONBLOCK);
 	}
 	else
 	{
-		fd = open(argv[1], O_RDWR);
+		fd = open(argv[1], O_RDWR);//默认打开方式为阻塞打开方式（休眠唤醒机制）
 	}
+
 	if (fd < 0)
 	{
 		printf("open %s err\n", argv[1]);
 		return -1;
 	}
 
+	// 读取设备ID相关的信息
 	err = ioctl(fd, EVIOCGID, &id);
 	if (err == 0)
 	{
@@ -77,6 +80,7 @@ int main(int argc, char **argv)
 		printf("version = 0x%x\n", id.version );
 	}
 
+	// 读取位图相关的信息
 	len = ioctl(fd, EVIOCGBIT(0, sizeof(evbit)), &evbit);
 	if (len > 0 && len <= sizeof(evbit))
 	{
@@ -93,7 +97,10 @@ int main(int argc, char **argv)
 		}
 		printf("\n");
 	}
-
+	
+	// 死循环读取event
+		// 如果非阻塞，一直会返回read err -1; 当外设产生数据的时候，就会返回get event 数据
+		// 如果阻塞，不会返回read err -1; 当外设产生数据的时候，就会返回get event 数据
 	while (1)
 	{
 		len = read(fd, &event, sizeof(event));

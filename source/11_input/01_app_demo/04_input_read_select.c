@@ -1,4 +1,4 @@
-
+// IO多路复用，select
 #include <linux/input.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -13,7 +13,7 @@
 #include <sys/time.h>
 
 
-/* ./01_get_input_info /dev/input/event0 */
+/*执行命令： ./01_get_input_info /dev/input/event0 */
 int main(int argc, char **argv)
 {
 	int fd;
@@ -28,7 +28,7 @@ int main(int argc, char **argv)
 	struct input_event event;
 	int nfds;
 	struct timeval tv;
-	fd_set readfds;
+	fd_set readfds; //文件描述符的集合
 	
 	char *ev_names[] = {
 		"EV_SYN ",
@@ -62,6 +62,7 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
+	// 非阻塞打开
 	fd = open(argv[1], O_RDWR | O_NONBLOCK);
 	if (fd < 0)
 	{
@@ -69,6 +70,7 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
+	// IO control： 获得IO输入设备ID有关的信息存储进入id结构体
 	err = ioctl(fd, EVIOCGID, &id);
 	if (err == 0)
 	{
@@ -78,10 +80,11 @@ int main(int argc, char **argv)
 		printf("version = 0x%x\n", id.version );
 	}
 
+	// 获得IO输入设备位图BIT有关的信息存储进入evbit结构体
 	len = ioctl(fd, EVIOCGBIT(0, sizeof(evbit)), &evbit);
 	if (len > 0 && len <= sizeof(evbit))
 	{
-		printf("support ev type: ");
+		printf("支持的位图类型， support ev type: ");
 		for (i = 0; i < len; i++)
 		{
 			byte = ((unsigned char *)evbit)[i];
@@ -95,6 +98,7 @@ int main(int argc, char **argv)
 		printf("\n");
 	}
 
+// 死循环读取数据
 	while (1)
 	{
 		/* 设置超时时间 */

@@ -1,4 +1,4 @@
-
+// IO异步操作，阻塞与非阻塞都是同步的，异步需要打开特殊的标记位置
 #include <linux/input.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -15,9 +15,11 @@ int fd;
 
 void my_sig_handler(int sig)
 {
+	// 信号处理函数
 	struct input_event event;
 	while (read(fd, &event, sizeof(event)) == sizeof(event))
 	{
+		// 读到的数据长度刚好等于sizeof(event),说明数据读取成功，打印数据
 		printf("get event: type = 0x%x, code = 0x%x, value = 0x%x\n", event.type, event.code, event.value);		
 	}
 }
@@ -108,13 +110,13 @@ int main(int argc, char **argv)
 	/* 把APP的进程号告诉驱动程序 */
 	fcntl(fd, F_SETOWN, getpid());
 	
-	/* 使能"异步通知" */
+	/* 使能"异步通知" ，先 get flag ,然后set flag */
 	flags = fcntl(fd, F_GETFL);
-	fcntl(fd, F_SETFL, flags | FASYNC);
+	fcntl(fd, F_SETFL, flags | FASYNC); // 设置flags里面的FASYNC位为1，使能"异步通知"
 	
 	while (1)
 	{
-		printf("main loop count = %d\n", count++);
+		printf("main loop count = %d\n", count++); //主线程随便干自己的事情
 		sleep(2);
 	}
 
