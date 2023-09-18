@@ -7,7 +7,7 @@
 #include <stdio.h>
 
 
-/* ./01_get_input_info /dev/input/event0 */
+/*使用命令： ./01_get_input_info /dev/input/event0 */
 int main(int argc, char **argv)
 {
 	int fd;
@@ -50,15 +50,17 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
+	// 打开文件argv[1]
 	fd = open(argv[1], O_RDWR);
 	if (fd < 0)
 	{
-		printf("open %s err\n", argv[1]);
+		printf("open %s err\n", argv[1]);//打印错误信息
 		return -1;
 	}
 
-	err = ioctl(fd, EVIOCGID, &id);
-	if (err == 0)
+// ioctl()函数的使用，`ioctl`函数来获取输入设备信息,将需要的信息存入id
+	err = ioctl(fd, EVIOCGID, &id);//`EVIOCGID`用来获取输入设备ID信息
+	if (err == 0)//如果`err`等于0，表示`ioctl`函数调用成功
 	{
 		printf("bustype = 0x%x\n", id.bustype );
 		printf("vendor	= 0x%x\n", id.vendor  );
