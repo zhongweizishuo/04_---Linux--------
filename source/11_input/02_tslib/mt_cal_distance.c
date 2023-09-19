@@ -1,4 +1,4 @@
-// 触摸屏有关数据的处理函数库文件
+// 计算两个接触点的距离
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -15,7 +15,7 @@
 
 #include <sys/ioctl.h>
 
-#include <tslib.h>
+#include <tslib.h>// 触摸屏有关数据的处理函数库文件
 
 int distance(struct ts_sample_mt *point1, struct ts_sample_mt *point2)
 {
