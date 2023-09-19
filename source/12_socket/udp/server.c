@@ -30,7 +30,7 @@ int main(int argc, char **argv)
 
 	int iClientNum = -1;
 	
-	iSocketServer = socket(AF_INET, SOCK_DGRAM, 0);
+	iSocketServer = socket(AF_INET, SOCK_DGRAM, 0); //SOCK_DGRAM 代表udp
 	if (-1 == iSocketServer)
 	{
 		printf("socket error!\n");
@@ -49,11 +49,13 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
+	// udp不需要listen() , accept()
 
 	while (1)
 	{
 		iAddrLen = sizeof(struct sockaddr);
 		iRecvLen = recvfrom(iSocketServer, ucRecvBuf, 999, 0, (struct sockaddr *)&tSocketClientAddr, &iAddrLen);
+		// recvfrom()接受数据
 		if (iRecvLen > 0)
 		{
 			ucRecvBuf[iRecvLen] = '\0';

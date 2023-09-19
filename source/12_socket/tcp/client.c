@@ -7,7 +7,8 @@
 #include <unistd.h>
 #include <stdio.h>
 
-/* socket
+/* 
+ * socket
  * connect
  * send/recv
  */
@@ -50,9 +51,10 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
+	// 不断发送数据
 	while (1)
 	{
-		if (fgets(ucSendBuf, 999, stdin))
+		if (fgets(ucSendBuf, 999, stdin))//stdin 写入数据到buf
 		{
 			iSendLen = send(iSocketClient, ucSendBuf, strlen(ucSendBuf), 0);
 			if (iSendLen <= 0)

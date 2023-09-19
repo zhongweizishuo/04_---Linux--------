@@ -44,6 +44,7 @@ int main(int argc, char **argv)
 
 
 	iRet = connect(iSocketClient, (const struct sockaddr *)&tSocketServerAddr, sizeof(struct sockaddr));	
+	// udp的connect()不需要三次握手
 	if (-1 == iRet)
 	{
 		printf("connect error!\n");

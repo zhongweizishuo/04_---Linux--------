@@ -1,3 +1,4 @@
+// 将connect()函数注释掉
 #include <sys/types.h>          /* See NOTES */
 #include <sys/socket.h>
 #include <string.h>
@@ -44,6 +45,7 @@ int main(int argc, char **argv)
 	memset(tSocketServerAddr.sin_zero, 0, 8);
 
 #if 0
+	// 将connect()函数注释掉，但是
 	iRet = connect(iSocketClient, (const struct sockaddr *)&tSocketServerAddr, sizeof(struct sockaddr));	
 	if (-1 == iRet)
 	{
