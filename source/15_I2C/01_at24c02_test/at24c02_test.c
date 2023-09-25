@@ -1,4 +1,5 @@
-
+// 使用I2C直接读写EEPROM
+// EEPROM：电可擦写ROM
 #include <sys/ioctl.h>
 #include <errno.h>
 #include <string.h>
@@ -30,6 +31,7 @@ int main(int argc, char **argv)
 
 	struct timespec req;
 	
+	// 用法提示
 	if (argc != 3 && argc != 4)
 	{
 		printf("Usage:\n");
@@ -38,6 +40,7 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
+	// 打开I2C的设备驱动
 	file = open_i2c_dev(argv[1][0]-'0', filename, sizeof(filename), 0);
 	if (file < 0)
 	{
@@ -45,6 +48,7 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
+	// 在驱动存在的条件下，使用I2C的普遍方式，强制读写（设置）数据
 	if (set_slave_addr(file, dev_addr, 1))
 	{
 		printf("can't set_slave_addr\n");
@@ -53,7 +57,7 @@ int main(int argc, char **argv)
 
 	if (argv[2][0] == 'w')
 	{
-		// write str: argv[3]
+		// write str: argv[3] 写操作
 		str = argv[3];
 
 		req.tv_sec  = 0;
@@ -69,7 +73,7 @@ int main(int argc, char **argv)
 				printf("i2c_smbus_write_byte_data err\n");
 				return -1;
 			}
-			// wait tWR(10ms)
+			// wait tWR(10ms) 硬件属性决定的，写完一个字节必须等待10mx
 			nanosleep(&req, NULL);
 			
 			mem_addr++;
@@ -84,7 +88,7 @@ int main(int argc, char **argv)
 	}
 	else
 	{
-		// read
+		// read 读操作
 		ret = i2c_smbus_read_i2c_block_data(file, mem_addr, sizeof(buf), buf);
 		if (ret < 0)
 		{
