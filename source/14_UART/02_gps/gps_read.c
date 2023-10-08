@@ -87,8 +87,8 @@ int set_opt(int fd,int nSpeed, int nBits, char nEvent, int nStop)
 	                         * 比如VMIN设为10表示至少读到10个数据才返回,
 	                         * 但是没有数据总不能一直等吧? 可以设置VTIME(单位是10秒)
 	                         * 假设VTIME=1，表示: 
-	                         *    10秒内一个数据都没有的话就返回
-	                         *    如果10秒内至少读到了1个字节，那就继续等待，完全读到VMIN个数据再返回
+	                         * 10秒内一个数据都没有的话就返回
+	                         * 如果10秒内至少读到了1个字节，那就继续等待，完全读到VMIN个数据再返回
 	                         */
 
 	tcflush(fd,TCIFLUSH);

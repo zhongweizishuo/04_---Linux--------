@@ -1,5 +1,5 @@
-// 使用I2C直接读写EEPROM
-// EEPROM：电可擦写ROM
+// 使用I2C（双向串行总线）直接读写EEPROM
+// EEPROM：电可擦写ROM (read only memory)
 #include <sys/ioctl.h>
 #include <errno.h>
 #include <string.h>
@@ -13,7 +13,8 @@
 #include <time.h>
 
 
-/* ./at24c02 <i2c_bus_number> w "100ask.taobao.com"
+/* 执行命令： 
+ * ./at24c02 <i2c_bus_number> w "100ask.taobao.com"
  * ./at24c02 <i2c_bus_number> r
  */
 
