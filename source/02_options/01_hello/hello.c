@@ -4,6 +4,7 @@
 #define   MIN  10 
 
 //#define  _DEBUG
+// 用来控制调试程序的运行
 #define   SetBit(x)  (1<<x) 
 
 int main(int argc, char* argv[])
